@@ -1,0 +1,131 @@
+/\*\*
+
+- Editor Layout Components - Usage Guide
+-
+- Three components work together to form the editor chrome:
+- 1.  EditorNavbar - Fixed top bar with sidebar toggle
+- 2.  ProjectSidebar - Floating sidebar from the left
+- 3.  EditorLayout - Container that manages state and layout
+-
+- ═══════════════════════════════════════════════════════════════════════════
+-
+- COMPONENT: EditorNavbar
+- File: components/editor-navbar.tsx
+-
+- Props:
+- - sidebarOpen: boolean - Current state of sidebar visibility
+- - onSidebarToggle: () => void - Callback when toggle button is clicked
+-
+- Features:
+- - Fixed at top of page
+- - Contains sidebar toggle button (left section)
+- - Center section (empty placeholder for future features)
+- - Right section (empty placeholder for user menu, etc.)
+- - Uses PanelLeftOpen/PanelLeftClose icons from lucide-react
+-
+- ═══════════════════════════════════════════════════════════════════════════
+-
+- COMPONENT: ProjectSidebar
+- File: components/project-sidebar.tsx
+-
+- Props:
+- - isOpen: boolean - Controls visibility and animation
+- - onClose: () => void - Callback when close button or overlay is clicked
+-
+- Features:
+- - Slides in from left with smooth animation
+- - Semi-transparent overlay backdrop
+- - Header with "Projects" title and close button
+- - Two tabs: "My Projects" and "Shared"
+- - Placeholder empty states for both tabs
+- - Full-width "New Project" button at bottom
+- - Does not push content (floats above)
+-
+- ═══════════════════════════════════════════════════════════════════════════
+-
+- COMPONENT: EditorLayout
+- File: components/editor-layout.tsx
+-
+- Props:
+- - children: React.ReactNode - Your page content
+-
+- Features:
+- - Manages sidebar state (open/close)
+- - Coordinates EditorNavbar and ProjectSidebar
+- - Provides main content area with proper scroll behavior
+- - Full screen height with proper z-index stacking
+- - Responsive and mobile-friendly
+-
+- ═══════════════════════════════════════════════════════════════════════════
+-
+- USAGE EXAMPLE:
+-
+- // In your page component
+- import { EditorLayout } from "@/components/editor-layout";
+-
+- export default function EditorPage() {
+- return (
+-     <EditorLayout>
+-       <div className="p-8">
+-         <h1>Your Editor Content Here</h1>
+-         {/* Your content goes here */}
+-       </div>
+-     </EditorLayout>
+- );
+- }
+-
+- ═══════════════════════════════════════════════════════════════════════════
+-
+- LAYOUT STRUCTURE:
+-
+- ┌─────────────────────────────────────────────┐
+- │ EditorNavbar (fixed, h-14) │ z-40
+- └─────────────────────────────────────────────┘
+- ┌──────────────┬─────────────────────────────┐
+- │ │ │
+- │ ProjectSide- │ │
+- │ bar (z-40) │ Main Content │
+- │ │ flex-1 overflow-auto │
+- │ w-64 │ │
+- │ │ │
+- └──────────────┴─────────────────────────────┘
+-
+- Overlay (z-30) appears behind sidebar when open
+-
+- ═══════════════════════════════════════════════════════════════════════════
+-
+- Z-INDEX LAYERING:
+- - EditorNavbar: z-40
+- - ProjectSidebar: z-40
+- - Sidebar Overlay: z-30
+- - Main Content: z-0 (default)
+-
+- This ensures sidebar appears above content but below navbar overlay.
+-
+- ═══════════════════════════════════════════════════════════════════════════
+-
+- STYLING TOKENS USED:
+- From globals.css:
+- - --bg-base: #080809 (main background)
+- - --bg-surface: #111114 (navbar/sidebar background)
+- - --border-default: #2a2a30 (borders)
+- - --text-primary: #f0f0f4 (primary text)
+- - --text-secondary: #c0c0cc (secondary text)
+- - --accent-primary: #00c8d4 (accent color)
+-
+- ═══════════════════════════════════════════════════════════════════════════
+-
+- DIALOG PATTERN:
+- File: components/dialog-pattern.ts
+-
+- The dialog pattern is documented and ready for use with:
+- - title prop
+- - description prop
+- - footer actions
+-
+- Import from @/components/ui/dialog for actual dialogs.
+-
+- ═══════════════════════════════════════════════════════════════════════════
+  \*/
+
+export {};
