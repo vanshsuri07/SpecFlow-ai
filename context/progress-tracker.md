@@ -14,10 +14,14 @@ Update this file whenever the current phase, active feature, or implementation s
 
 - Design system setup (shadcn/ui + core primitives).
 - Editor chrome components (navbar, sidebar, layout).
+- Clerk authentication wired: `ClerkProvider` (dark theme + CSS variable overrides), middleware/proxy protection, `UserButton` in navbar, sign-in and sign-up pages.
 
 ## In Progress
 
 - Editor page and routing setup.
+
+- Editor page and routing setup.
+  - Root routing: `/` now redirects authenticated users to `/editor` and unauthenticated users to `/sign-in`.
 
 ## Next Up
 
@@ -41,3 +45,4 @@ Update this file whenever the current phase, active feature, or implementation s
 - All components use existing shadcn/ui primitives and lucide icons
 - Components compile without external dependencies (ready for use)
 - Usage guide created in EDITOR_LAYOUT_GUIDE.md
+- Auth work done: `ClerkProvider` appearance mapped to CSS variables, `proxy.ts` middleware enforces protection, sign-in/sign-up pages use Clerk components with the two-panel layout, `UserButton` present in `editor-navbar.tsx`.
