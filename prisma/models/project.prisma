@@ -1,0 +1,34 @@
+// Models for project data (informational copy).
+
+enum ProjectStatus {
+  DRAFT
+  ARCHIVED
+}
+
+model Project {
+  id             String             @id @default(cuid())
+  ownerId        String             @map("owner_id")
+  name           String
+  description    String?
+  status         ProjectStatus      @default(DRAFT)
+  canvasJsonPath String?            @map("canvas_json_path")
+  createdAt      DateTime           @default(now()) @map("created_at")
+  updatedAt      DateTime           @updatedAt @map("updated_at")
+
+  collaborators  ProjectCollaborator[]
+
+  @@index([ownerId], name: "idx_project_owner")
+  @@index([createdAt], name: "idx_project_created_at")
+}
+
+model ProjectCollaborator {
+  id        String   @id @default(cuid())
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String   @map("project_id")
+  email     String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([projectId, email], name: "uniq_project_email")
+  @@index([email], name: "idx_collab_email")
+  @@index([projectId, createdAt], name: "idx_collab_project_date")
+}

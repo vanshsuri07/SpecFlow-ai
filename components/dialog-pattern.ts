@@ -37,7 +37,7 @@
  *           </DialogDescription>
  *         </DialogHeader>
  *
- *         {/* Dialog content */}
+ *         <!-- Dialog content -->
  *
  *         <DialogFooter>
  *           <Button variant="outline">Cancel</Button>
