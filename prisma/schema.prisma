@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Project models (also mirrored in prisma/models/project.prisma)
+
+enum ProjectStatus {
+  DRAFT
+  ARCHIVED
+}
+
+model Project {
+  id             String             @id @default(cuid())
+  ownerId        String             @map("owner_id")
+  name           String
+  description    String?
+  status         ProjectStatus      @default(DRAFT)
+  canvasJsonPath String?            @map("canvas_json_path")
+  createdAt      DateTime           @default(now()) @map("created_at")
+  updatedAt      DateTime           @updatedAt @map("updated_at")
+
+  collaborators  ProjectCollaborator[]
+
+  @@index([ownerId], name: "idx_project_owner")
+  @@index([createdAt], name: "idx_project_created_at")
+}
+
+model ProjectCollaborator {
+  id        String   @id @default(cuid())
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String   @map("project_id")
+  email     String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([projectId, email], name: "uniq_project_email")
+  @@index([email], name: "idx_collab_email")
+  @@index([projectId, createdAt], name: "idx_collab_project_date")
+}

@@ -1,16 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { X, Plus } from "lucide-react";
+import { X, Plus, Edit, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 interface ProjectSidebarProps {
   isOpen: boolean;
   onClose: () => void;
+  projects?: { id: string; name: string; slug: string; owned?: boolean }[];
+  onCreate?: () => void;
+  onRename?: (p: { id: string; name: string; slug: string }) => void;
+  onDelete?: (p: { id: string; name: string; slug: string }) => void;
 }
 
-export function ProjectSidebar({ isOpen, onClose }: ProjectSidebarProps) {
+export function ProjectSidebar({ isOpen, onClose, projects = [], onCreate, onRename, onDelete }: ProjectSidebarProps) {
   return (
     <>
       {/* Overlay */}
@@ -50,14 +54,44 @@ export function ProjectSidebar({ isOpen, onClose }: ProjectSidebarProps) {
             </TabsList>
 
             <TabsContent value="my-projects" className="flex-1 px-4">
-              <div className="flex items-center justify-center h-full text-copy-muted">
-                <p>No projects yet</p>
+              <div className="flex flex-col gap-2">
+                {projects.filter((p) => p.owned).length === 0 && (
+                  <div className="text-copy-muted">No projects yet</div>
+                )}
+
+                {projects.filter((p) => p.owned).map((p) => (
+                  <div key={p.id} className="group flex items-center justify-between p-2 rounded-md hover:bg-accent/5">
+                    <div>
+                      <div className="font-medium text-copy-primary">{p.name}</div>
+                      <div className="text-sm text-copy-secondary">{p.slug}</div>
+                    </div>
+                    <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Button size="sm" variant="ghost" onClick={() => onRename?.(p)} aria-label={`Rename ${p.name}`}>
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                      <Button size="sm" variant="ghost" onClick={() => onDelete?.(p)} aria-label={`Delete ${p.name}`}>
+                        <Trash className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
               </div>
             </TabsContent>
 
             <TabsContent value="shared" className="flex-1 px-4">
-              <div className="flex items-center justify-center h-full text-copy-muted">
-                <p>No shared projects</p>
+              <div className="flex flex-col gap-2">
+                {projects.filter((p) => !p.owned).length === 0 && (
+                  <div className="text-copy-muted">No shared projects</div>
+                )}
+
+                {projects.filter((p) => !p.owned).map((p) => (
+                  <div key={p.id} className="flex items-center justify-between p-2 rounded-md hover:bg-accent/5">
+                    <div>
+                      <div className="font-medium text-copy-primary">{p.name}</div>
+                      <div className="text-sm text-copy-secondary">{p.slug}</div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </TabsContent>
           </Tabs>
@@ -65,7 +99,7 @@ export function ProjectSidebar({ isOpen, onClose }: ProjectSidebarProps) {
 
         {/* Footer Button */}
         <div className="p-4 border-t border-border-default">
-          <Button className="w-full" variant="default" size="default">
+          <Button className="w-full" variant="default" size="default" onClick={() => onCreate?.()}>
             <Plus className="h-4 w-4" />
             New Project
           </Button>
